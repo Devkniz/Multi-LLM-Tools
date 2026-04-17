@@ -1,0 +1,427 @@
+skills:
+- name: ai-regression-testing
+  skill: ai-regression-testing
+  description: Regression testing strategies for AI-assisted development. Sandbox-mode
+    API testing without database dependencies, automated bug-check workflows, and
+    patterns to catch AI blind spots where the same model writes and reviews code.
+  tier: local
+  internet_required: false
+- name: android-clean-architecture
+  skill: android-clean-architecture
+  description: Clean Architecture patterns for Android and Kotlin Multiplatform projects
+    — module structure, dependency rules, UseCases, Repositories, and data layer patterns.
+  tier: local
+  internet_required: false
+- name: api-design
+  skill: api-design
+  description: REST API design patterns including resource naming, status codes, pagination,
+    filtering, error responses, versioning, and rate limiting for production APIs.
+  tier: local
+  internet_required: false
+- name: article-writing
+  skill: article-writing
+  description: Write articles, guides, blog posts, tutorials, newsletter issues, and
+    other long-form content in a distinctive voice derived from supplied examples
+    or brand guidance. Use when the user wants polished written content longer than
+    a paragraph, especially when voice consistency, structure, and credibility matter.
+  tier: local
+  internet_required: false
+- name: backend-patterns
+  skill: backend-patterns
+  description: Backend architecture patterns, API design, database optimization, and
+    server-side best practices for Node.js, Express, and Next.js API routes.
+  tier: local
+  internet_required: false
+- name: bun-runtime
+  skill: bun-runtime
+  description: Bun as runtime, package manager, bundler, and test runner. When to
+    choose Bun vs Node, migration notes, and Vercel support.
+  tier: local
+  internet_required: false
+- name: claude-api
+  skill: claude-api
+  description: Anthropic Claude API patterns for Python and TypeScript. Covers Messages
+    API, streaming, tool use, vision, extended thinking, batches, prompt caching,
+    and Claude Agent SDK. Use when building applications with the Claude API or Anthropic
+    SDKs.
+  tier: local
+  internet_required: false
+- name: coding-standards
+  skill: coding-standards
+  description: Universal coding standards, best practices, and patterns for TypeScript,
+    JavaScript, React, and Node.js development.
+  tier: local
+  internet_required: false
+- name: compose-multiplatform-patterns
+  skill: compose-multiplatform-patterns
+  description: Compose Multiplatform and Jetpack Compose patterns for KMP projects
+    — state management, navigation, theming, performance, and platform-specific UI.
+  tier: local
+  internet_required: false
+- name: configure-ecc
+  skill: configure-ecc
+  description: Interactive installer for Everything Claude Code — guides users through
+    selecting and installing skills and rules to user-level or project-level directories,
+    verifies paths, and optionally optimizes installed files.
+  tier: meta
+  internet_required: false
+- name: content-engine
+  skill: content-engine
+  description: Create platform-native content systems for X, LinkedIn, TikTok, YouTube,
+    newsletters, and repurposed multi-platform campaigns. Use when the user wants
+    social posts, threads, scripts, content calendars, or one source asset adapted
+    cleanly across platforms.
+  tier: local
+  internet_required: false
+- name: continuous-learning
+  skill: continuous-learning
+  description: Automatically extract reusable patterns from Claude Code sessions and
+    save them as learned skills for future use.
+  tier: local
+  internet_required: false
+- name: continuous-learning-v2
+  skill: continuous-learning-v2
+  description: Instinct-based learning system that observes sessions via hooks, creates
+    atomic instincts with confidence scoring, and evolves them into skills/commands/agents.
+    v2.1 adds project-scoped instincts to prevent cross-project contamination.
+  tier: local
+  internet_required: false
+- name: cpp-coding-standards
+  skill: cpp-coding-standards
+  description: C++ coding standards based on the C++ Core Guidelines (isocpp.github.io).
+    Use when writing, reviewing, or refactoring C++ code to enforce modern, safe,
+    and idiomatic practices.
+  tier: local
+  internet_required: false
+- name: cpp-testing
+  skill: cpp-testing
+  description: Use only when writing/updating/fixing C++ tests, configuring GoogleTest/CTest,
+    diagnosing failing or flaky tests, or adding coverage/sanitizers.
+  tier: local
+  internet_required: false
+- name: crosspost
+  skill: crosspost
+  description: Multi-platform content distribution across X, LinkedIn, Threads, and
+    Bluesky. Adapts content per platform using content-engine patterns. Never posts
+    identical content cross-platform. Use when the user wants to distribute content
+    across social platforms.
+  tier: internet
+  internet_required: true
+- name: deep-research
+  skill: deep-research
+  description: Multi-source deep research using firecrawl and exa MCPs. Searches the
+    web, synthesizes findings, and delivers cited reports with source attribution.
+    Use when the user wants thorough research on any topic with evidence and citations.
+  tier: internet
+  internet_required: true
+- name: django-patterns
+  skill: django-patterns
+  description: Django architecture patterns, REST API design with DRF, ORM best practices,
+    caching, signals, middleware, and production-grade Django apps.
+  tier: local
+  internet_required: false
+- name: django-tdd
+  skill: django-tdd
+  description: Django testing strategies with pytest-django, TDD methodology, factory_boy,
+    mocking, coverage, and testing Django REST Framework APIs.
+  tier: local
+  internet_required: false
+- name: django-verification
+  skill: django-verification
+  description: 'Verification loop for Django projects: migrations, linting, tests
+    with coverage, security scans, and deployment readiness checks before release
+    or PR.'
+  tier: local
+  internet_required: false
+- name: dmux-workflows
+  skill: dmux-workflows
+  description: Multi-agent orchestration using dmux (tmux pane manager for AI agents).
+    Patterns for parallel agent workflows across Claude Code, Codex, OpenCode, and
+    other harnesses. Use when running multiple agent sessions in parallel or coordinating
+    multi-agent development workflows.
+  tier: local
+  internet_required: false
+- name: documentation-lookup
+  skill: documentation-lookup
+  description: Use up-to-date library and framework docs via Context7 MCP instead
+    of training data. Activates for setup questions, API references, code examples,
+    or when the user names a framework (e.g. React, Next.js, Prisma).
+  tier: internet
+  internet_required: true
+- name: e2e-testing
+  skill: e2e-testing
+  description: Playwright E2E testing patterns, Page Object Model, configuration,
+    CI/CD integration, artifact management, and flaky test strategies.
+  tier: local
+  internet_required: false
+- name: eval-harness
+  skill: eval-harness
+  description: Formal evaluation framework for Claude Code sessions implementing eval-driven
+    development (EDD) principles
+  tier: local
+  internet_required: false
+- name: everything-claude-code-conventions
+  skill: everything-claude-code
+  description: Development conventions and patterns for everything-claude-code. JavaScript
+    project with conventional commits.
+  tier: meta
+  internet_required: false
+- name: exa-search
+  skill: exa-search
+  description: Neural search via Exa MCP for web, code, and company research. Use
+    when the user needs web search, code examples, company intel, people lookup, or
+    AI-powered deep research with Exa's neural search engine.
+  tier: internet
+  internet_required: true
+- name: fal-ai-media
+  skill: fal-ai-media
+  description: Unified media generation via fal.ai MCP — image, video, and audio.
+    Covers text-to-image (Nano Banana), text/image-to-video (Seedance, Kling, Veo
+    3), text-to-speech (CSM-1B), and video-to-audio (ThinkSound). Use when the user
+    wants to generate images, videos, or audio with AI.
+  tier: internet
+  internet_required: true
+- name: frontend-patterns
+  skill: frontend-patterns
+  description: Frontend development patterns for React, Next.js, state management,
+    performance optimization, and UI best practices.
+  tier: local
+  internet_required: false
+- name: frontend-slides
+  skill: frontend-slides
+  description: Create stunning, animation-rich HTML presentations from scratch or
+    by converting PowerPoint files. Use when the user wants to build a presentation,
+    convert a PPT/PPTX to web, or create slides for a talk/pitch. Helps non-designers
+    discover their aesthetic through visual exploration rather than abstract choices.
+  tier: meta
+  internet_required: false
+- name: golang-patterns
+  skill: golang-patterns
+  description: Idiomatic Go patterns, best practices, and conventions for building
+    robust, efficient, and maintainable Go applications.
+  tier: local
+  internet_required: false
+- name: golang-testing
+  skill: golang-testing
+  description: Go testing patterns including table-driven tests, subtests, benchmarks,
+    fuzzing, and test coverage. Follows TDD methodology with idiomatic Go practices.
+  tier: local
+  internet_required: false
+- name: investor-materials
+  skill: investor-materials
+  description: Create and update pitch decks, one-pagers, investor memos, accelerator
+    applications, financial models, and fundraising materials. Use when the user needs
+    investor-facing documents, projections, use-of-funds tables, milestone plans,
+    or materials that must stay internally consistent across multiple fundraising
+    assets.
+  tier: local
+  internet_required: false
+- name: investor-outreach
+  skill: investor-outreach
+  description: Draft cold emails, warm intro blurbs, follow-ups, update emails, and
+    investor communications for fundraising. Use when the user wants outreach to angels,
+    VCs, strategic investors, or accelerators and needs concise, personalized, investor-facing
+    messaging.
+  tier: local
+  internet_required: false
+- name: iterative-retrieval
+  skill: iterative-retrieval
+  description: Pattern for progressively refining context retrieval to solve the subagent
+    context problem
+  tier: local
+  internet_required: false
+- name: java-coding-standards
+  skill: java-coding-standards
+  description: 'Java coding standards for Spring Boot services: naming, immutability,
+    Optional usage, streams, exceptions, generics, and project layout.'
+  tier: local
+  internet_required: false
+- name: kotlin-coroutines-flows
+  skill: kotlin-coroutines-flows
+  description: Kotlin Coroutines and Flow patterns for Android and KMP — structured
+    concurrency, Flow operators, StateFlow, error handling, and testing.
+  tier: local
+  internet_required: false
+- name: kotlin-exposed-patterns
+  skill: kotlin-exposed-patterns
+  description: JetBrains Exposed ORM patterns including DSL queries, DAO pattern,
+    transactions, HikariCP connection pooling, Flyway migrations, and repository pattern.
+  tier: local
+  internet_required: false
+- name: kotlin-ktor-patterns
+  skill: kotlin-ktor-patterns
+  description: Ktor server patterns including routing DSL, plugins, authentication,
+    Koin DI, kotlinx.serialization, WebSockets, and testApplication testing.
+  tier: local
+  internet_required: false
+- name: kotlin-patterns
+  skill: kotlin-patterns
+  description: Idiomatic Kotlin patterns, best practices, and conventions for building
+    robust, efficient, and maintainable Kotlin applications with coroutines, null
+    safety, and DSL builders.
+  tier: local
+  internet_required: false
+- name: kotlin-testing
+  skill: kotlin-testing
+  description: Kotlin testing patterns with Kotest, MockK, coroutine testing, property-based
+    testing, and Kover coverage. Follows TDD methodology with idiomatic Kotlin practices.
+  tier: local
+  internet_required: false
+- name: laravel-patterns
+  skill: laravel-patterns
+  description: Laravel architecture patterns, routing/controllers, Eloquent ORM, service
+    layers, queues, events, caching, and API resources for production apps.
+  tier: local
+  internet_required: false
+- name: laravel-tdd
+  skill: laravel-tdd
+  description: Test-driven development for Laravel with PHPUnit and Pest, factories,
+    database testing, fakes, and coverage targets.
+  tier: local
+  internet_required: false
+- name: laravel-verification
+  skill: laravel-verification
+  description: ''
+  tier: local
+  internet_required: false
+- name: market-research
+  skill: market-research
+  description: Conduct market research, competitive analysis, investor due diligence,
+    and industry intelligence with source attribution and decision-oriented summaries.
+    Use when the user wants market sizing, competitor comparisons, fund research,
+    technology scans, or research that informs business decisions.
+  tier: internet
+  internet_required: true
+- name: mcp-server-patterns
+  skill: mcp-server-patterns
+  description: Build MCP servers with Node/TypeScript SDK — tools, resources, prompts,
+    Zod validation, stdio vs Streamable HTTP. Use Context7 or official MCP docs for
+    latest API.
+  tier: local
+  internet_required: false
+- name: nextjs-turbopack
+  skill: nextjs-turbopack
+  description: Next.js 16+ and Turbopack — incremental bundling, FS caching, dev speed,
+    and when to use Turbopack vs webpack.
+  tier: local
+  internet_required: false
+- name: perl-patterns
+  skill: perl-patterns
+  description: Modern Perl 5.36+ idioms, best practices, and conventions for building
+    robust, maintainable Perl applications.
+  tier: local
+  internet_required: false
+- name: perl-testing
+  skill: perl-testing
+  description: Perl testing patterns using Test2::V0, Test::More, prove runner, mocking,
+    coverage with Devel::Cover, and TDD methodology.
+  tier: local
+  internet_required: false
+- name: plankton-code-quality
+  skill: plankton-code-quality
+  description: Write-time code quality enforcement using Plankton — auto-formatting,
+    linting, and Claude-powered fixes on every file edit via hooks.
+  tier: local
+  internet_required: false
+- name: project-guidelines-example
+  skill: project-guidelines-example
+  description: Example project-specific skill template based on a real production
+    application.
+  tier: local
+  internet_required: false
+- name: python-patterns
+  skill: python-patterns
+  description: Pythonic idioms, PEP 8 standards, type hints, and best practices for
+    building robust, efficient, and maintainable Python applications.
+  tier: local
+  internet_required: false
+- name: python-testing
+  skill: python-testing
+  description: Python testing strategies using pytest, TDD methodology, fixtures,
+    mocking, parametrization, and coverage requirements.
+  tier: local
+  internet_required: false
+- name: rust-patterns
+  skill: rust-patterns
+  description: Idiomatic Rust patterns, ownership, error handling, traits, concurrency,
+    and best practices for building safe, performant applications.
+  tier: local
+  internet_required: false
+- name: rust-testing
+  skill: rust-testing
+  description: Rust testing patterns including unit tests, integration tests, async
+    testing, property-based testing, mocking, and coverage. Follows TDD methodology.
+  tier: local
+  internet_required: false
+- name: search-first
+  skill: search-first
+  description: Research-before-coding workflow. Search for existing tools, libraries,
+    and patterns before writing custom code. Invokes the researcher agent.
+  tier: internet
+  internet_required: true
+- name: security-review
+  skill: security-review
+  description: Use this skill when adding authentication, handling user input, working
+    with secrets, creating API endpoints, or implementing payment/sensitive features.
+    Provides comprehensive security checklist and patterns.
+  tier: local
+  internet_required: false
+- name: skill-stocktake
+  skill: skill-stocktake
+  description: Use when auditing Claude skills and commands for quality. Supports
+    Quick Scan (changed skills only) and Full Stocktake modes with sequential subagent
+    batch evaluation.
+  tier: internet
+  internet_required: true
+- name: springboot-patterns
+  skill: springboot-patterns
+  description: Spring Boot architecture patterns, REST API design, layered services,
+    data access, caching, async processing, and logging. Use for Java Spring Boot
+    backend work.
+  tier: local
+  internet_required: false
+- name: springboot-tdd
+  skill: springboot-tdd
+  description: Test-driven development for Spring Boot using JUnit 5, Mockito, MockMvc,
+    Testcontainers, and JaCoCo. Use when adding features, fixing bugs, or refactoring.
+  tier: local
+  internet_required: false
+- name: springboot-verification
+  skill: springboot-verification
+  description: 'Verification loop for Spring Boot projects: build, static analysis,
+    tests with coverage, security scans, and diff review before release or PR.'
+  tier: local
+  internet_required: false
+- name: strategic-compact
+  skill: strategic-compact
+  description: Suggests manual context compaction at logical intervals to preserve
+    context through task phases rather than arbitrary auto-compaction.
+  tier: local
+  internet_required: false
+- name: tdd-workflow
+  skill: tdd-workflow
+  description: Use this skill when writing new features, fixing bugs, or refactoring
+    code. Enforces test-driven development with 80%+ coverage including unit, integration,
+    and E2E tests.
+  tier: local
+  internet_required: false
+- name: verification-loop
+  skill: verification-loop
+  description: A comprehensive verification system for Claude Code sessions.
+  tier: local
+  internet_required: false
+- name: video-editing
+  skill: video-editing
+  description: AI-assisted video editing workflows for cutting, structuring, and augmenting
+    real footage. Covers the full pipeline from raw capture through FFmpeg, Remotion,
+    ElevenLabs, fal.ai, and final polish in Descript or CapCut. Use when the user
+    wants to edit video, cut footage, create vlogs, or build video content.
+  tier: internet
+  internet_required: true
+- name: x-api
+  skill: x-api
+  description: X/Twitter API integration for posting tweets, threads, reading timelines,
+    search, and analytics. Covers OAuth auth patterns, rate limits, and platform-native
+    content posting. Use when the user wants to interact with X programmatically.
+  tier: internet
+  internet_required: true

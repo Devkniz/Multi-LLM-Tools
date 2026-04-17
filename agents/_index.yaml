@@ -1,0 +1,396 @@
+agents:
+- name: architect
+  file: architect.md
+  description: Software architecture specialist for system design, scalability, and
+    technical decision-making. Use PROACTIVELY when planning new features, refactoring
+    large systems, or making architectural decisions.
+  tier: local
+  model_tier: best
+  tools:
+  - file_read
+  - search
+  - file_search
+  internet_required: false
+- name: build-error-resolver
+  file: build-error-resolver.md
+  description: Build and TypeScript error resolution specialist. Use PROACTIVELY when
+    build fails or type errors occur. Fixes build/type errors only with minimal diffs,
+    no architectural edits. Focuses on getting the build green quickly.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: chief-of-staff
+  file: chief-of-staff.md
+  description: Personal communication chief of staff that triages email, Slack, LINE,
+    and Messenger. Classifies messages into 4 tiers (skip/info_only/meeting_info/action_required),
+    generates draft replies, and enforces post-send follow-through via hooks. Use
+    when managing multi-channel communication workflows.
+  tier: local
+  model_tier: best
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  - file_edit
+  - file_write
+  internet_required: false
+- name: code-reviewer
+  file: code-reviewer.md
+  description: Expert code review specialist. Proactively reviews code for quality,
+    security, and maintainability. Use immediately after writing or modifying code.
+    MUST BE USED for all code changes.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  internet_required: false
+- name: cpp-build-resolver
+  file: cpp-build-resolver.md
+  description: C++ build, CMake, and compilation error resolution specialist. Fixes
+    build errors, linker issues, and template errors with minimal changes. Use when
+    C++ builds fail.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: cpp-reviewer
+  file: cpp-reviewer.md
+  description: Expert C++ code reviewer specializing in memory safety, modern C++
+    idioms, concurrency, and performance. Use for all C++ code changes. MUST BE USED
+    for C++ projects.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  internet_required: false
+- name: database-reviewer
+  file: database-reviewer.md
+  description: PostgreSQL database specialist for query optimization, schema design,
+    security, and performance. Use PROACTIVELY when writing SQL, creating migrations,
+    designing schemas, or troubleshooting database performance. Incorporates Supabase
+    best practices.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: doc-updater
+  file: doc-updater.md
+  description: Documentation and codemap specialist. Use PROACTIVELY for updating
+    codemaps and documentation. Runs /update-codemaps and /update-docs, generates
+    docs/CODEMAPS/*, updates READMEs and guides.
+  tier: local
+  model_tier: fast
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: docs-lookup
+  file: docs-lookup.md
+  description: When the user asks how to use a library, framework, or API or needs
+    up-to-date code examples, use Context7 MCP to fetch current documentation and
+    return answers with examples. Invoke for docs/API/setup questions.
+  tier: internet
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - mcp__context7__resolve-library-id
+  - mcp__context7__query-docs
+  internet_required: true
+- name: e2e-runner
+  file: e2e-runner.md
+  description: End-to-end testing specialist using Vercel Agent Browser (preferred)
+    with Playwright fallback. Use PROACTIVELY for generating, maintaining, and running
+    E2E tests. Manages test journeys, quarantines flaky tests, uploads artifacts (screenshots,
+    videos, traces), and ensures critical user flows work.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: flutter-reviewer
+  file: flutter-reviewer.md
+  description: Flutter and Dart code reviewer. Reviews Flutter code for widget best
+    practices, state management patterns, Dart idioms, performance pitfalls, accessibility,
+    and clean architecture violations. Library-agnostic — works with any state management
+    solution and tooling.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  internet_required: false
+- name: go-build-resolver
+  file: go-build-resolver.md
+  description: Go build, vet, and compilation error resolution specialist. Fixes build
+    errors, go vet issues, and linter warnings with minimal changes. Use when Go builds
+    fail.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: go-reviewer
+  file: go-reviewer.md
+  description: Expert Go code reviewer specializing in idiomatic Go, concurrency patterns,
+    error handling, and performance. Use for all Go code changes. MUST BE USED for
+    Go projects.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  internet_required: false
+- name: harness-optimizer
+  file: harness-optimizer.md
+  description: Analyze and improve the local agent harness configuration for reliability,
+    cost, and throughput.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  - file_edit
+  internet_required: false
+- name: java-build-resolver
+  file: java-build-resolver.md
+  description: Java/Maven/Gradle build, compilation, and dependency error resolution
+    specialist. Fixes build errors, Java compiler errors, and Maven/Gradle issues
+    with minimal changes. Use when Java or Spring Boot builds fail.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: java-reviewer
+  file: java-reviewer.md
+  description: Expert Java and Spring Boot code reviewer specializing in layered architecture,
+    JPA patterns, security, and concurrency. Use for all Java code changes. MUST BE
+    USED for Spring Boot projects.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  internet_required: false
+- name: kotlin-build-resolver
+  file: kotlin-build-resolver.md
+  description: Kotlin/Gradle build, compilation, and dependency error resolution specialist.
+    Fixes build errors, Kotlin compiler errors, and Gradle issues with minimal changes.
+    Use when Kotlin builds fail.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: kotlin-reviewer
+  file: kotlin-reviewer.md
+  description: Kotlin and Android/KMP code reviewer. Reviews Kotlin code for idiomatic
+    patterns, coroutine safety, Compose best practices, clean architecture violations,
+    and common Android pitfalls.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  internet_required: false
+- name: loop-operator
+  file: loop-operator.md
+  description: Operate autonomous agent loops, monitor progress, and intervene safely
+    when loops stall.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  - file_edit
+  internet_required: false
+- name: planner
+  file: planner.md
+  description: Expert planning specialist for complex features and refactoring. Use
+    PROACTIVELY when users request feature implementation, architectural changes,
+    or complex refactoring. Automatically activated for planning tasks.
+  tier: local
+  model_tier: best
+  tools:
+  - file_read
+  - search
+  - file_search
+  internet_required: false
+- name: python-reviewer
+  file: python-reviewer.md
+  description: Expert Python code reviewer specializing in PEP 8 compliance, Pythonic
+    idioms, type hints, security, and performance. Use for all Python code changes.
+    MUST BE USED for Python projects.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  internet_required: false
+- name: pytorch-build-resolver
+  file: pytorch-build-resolver.md
+  description: PyTorch runtime, CUDA, and training error resolution specialist. Fixes
+    tensor shape mismatches, device errors, gradient issues, DataLoader problems,
+    and mixed precision failures with minimal changes. Use when PyTorch training or
+    inference crashes.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: refactor-cleaner
+  file: refactor-cleaner.md
+  description: Dead code cleanup and consolidation specialist. Use PROACTIVELY for
+    removing unused code, duplicates, and refactoring. Runs analysis tools (knip,
+    depcheck, ts-prune) to identify dead code and safely removes it.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: rust-build-resolver
+  file: rust-build-resolver.md
+  description: Rust build, compilation, and dependency error resolution specialist.
+    Fixes cargo build errors, borrow checker issues, and Cargo.toml problems with
+    minimal changes. Use when Rust builds fail.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: rust-reviewer
+  file: rust-reviewer.md
+  description: Expert Rust code reviewer specializing in ownership, lifetimes, error
+    handling, unsafe usage, and idiomatic patterns. Use for all Rust code changes.
+    MUST BE USED for Rust projects.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  internet_required: false
+- name: security-reviewer
+  file: security-reviewer.md
+  description: Security vulnerability detection and remediation specialist. Use PROACTIVELY
+    after writing code that handles user input, authentication, API endpoints, or
+    sensitive data. Flags secrets, SSRF, injection, unsafe crypto, and OWASP Top 10
+    vulnerabilities.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  - file_search
+  internet_required: false
+- name: tdd-guide
+  file: tdd-guide.md
+  description: Test-Driven Development specialist enforcing write-tests-first methodology.
+    Use PROACTIVELY when writing new features, fixing bugs, or refactoring code. Ensures
+    80%+ test coverage.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - file_write
+  - file_edit
+  - shell_exec
+  - search
+  internet_required: false
+- name: typescript-reviewer
+  file: typescript-reviewer.md
+  description: Expert TypeScript/JavaScript code reviewer specializing in type safety,
+    async correctness, Node/web security, and idiomatic patterns. Use for all TypeScript
+    and JavaScript code changes. MUST BE USED for TypeScript/JavaScript projects.
+  tier: local
+  model_tier: mid
+  tools:
+  - file_read
+  - search
+  - file_search
+  - shell_exec
+  internet_required: false
