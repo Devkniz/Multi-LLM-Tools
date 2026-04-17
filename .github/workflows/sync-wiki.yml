@@ -1,0 +1,56 @@
+name: Sync Wiki
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'docs/wiki/**'
+
+  # Allow manual trigger
+  workflow_dispatch:
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Clone or initialize wiki
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          WIKI_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.wiki.git"
+
+          if git clone "$WIKI_URL" /tmp/wiki 2>/dev/null; then
+            echo "Wiki cloned successfully."
+          else
+            echo "Wiki not initialized yet — creating fresh repo."
+            mkdir -p /tmp/wiki
+            cd /tmp/wiki
+            git init
+            git remote add origin "$WIKI_URL"
+          fi
+
+      - name: Copy wiki pages
+        run: |
+          cp docs/wiki/*.md /tmp/wiki/
+
+      - name: Commit and push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd /tmp/wiki
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add .
+          if git diff --quiet && git diff --staged --quiet; then
+            echo "No changes to wiki pages."
+          else
+            git commit -m "docs: sync wiki from docs/wiki/ [skip ci]"
+            git push -u origin master --force
+            echo "Wiki updated successfully."
+          fi
