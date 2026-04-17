@@ -19,20 +19,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Clone or initialize wiki
+      - name: Clone wiki
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           WIKI_URL="https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.wiki.git"
 
-          if git clone "$WIKI_URL" /tmp/wiki 2>/dev/null; then
+          if git clone "$WIKI_URL" /tmp/wiki; then
             echo "Wiki cloned successfully."
           else
-            echo "Wiki not initialized yet — creating fresh repo."
-            mkdir -p /tmp/wiki
-            cd /tmp/wiki
-            git init
-            git remote add origin "$WIKI_URL"
+            echo ""
+            echo "ERROR: Could not clone the wiki repository."
+            echo ""
+            echo "The GitHub wiki must be initialized manually before this action can push to it."
+            echo "Steps:"
+            echo "  1. Go to https://github.com/${{ github.repository }}/wiki"
+            echo "  2. Click 'Create the first page'"
+            echo "  3. Save any content"
+            echo "  4. Re-run this workflow: Actions → Sync Wiki → Run workflow"
+            echo ""
+            exit 1
           fi
 
       - name: Copy wiki pages
