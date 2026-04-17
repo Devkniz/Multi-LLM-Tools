@@ -113,6 +113,35 @@ See `prompts/aider/usage-examples.sh` for all examples.
 
 Then use `/planner`, `/code-reviewer`, `/tdd-guide`, etc. in the Continue chat.
 
+### OpenWebUI — Slash Commands natifs
+
+Installe la Filter Pipeline pour utiliser `/plan`, `/review`, `/tdd`, etc. directement dans le chat :
+
+```
+/plan Build a REST API with JWT authentication
+/review                  ← colle ton code dans le message
+/tdd Write a user auth module
+/security                ← audit de la conversation courante
+/help                    ← liste toutes les commandes
+```
+
+**Installation rapide (Docker Compose) :**
+
+```yaml
+services:
+  pipelines:
+    image: ghcr.io/open-webui/pipelines:main
+    volumes:
+      - ./prompts/openwebui/slash_commands_pipeline.py:/app/pipelines/slash_commands_pipeline.py
+      - ./agents:/app/pipelines/agents
+    ports:
+      - "9099:9099"
+```
+
+Puis dans OpenWebUI → **Settings → Admin → Pipelines** → ajouter `http://pipelines:9099`.
+
+Voir `prompts/openwebui/README.md` pour le guide complet.
+
 ### LM Studio
 
 1. Start LM Studio, enable the local server (`http://localhost:1234`)
