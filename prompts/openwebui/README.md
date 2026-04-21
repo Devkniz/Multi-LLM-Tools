@@ -1,7 +1,43 @@
-# OpenWebUI — Slash Commands Pipeline
+# OpenWebUI — Slash Commands Filter
 
-This Filter Pipeline intercepts `/command` patterns in the chat and injects
-the corresponding agent system prompt before the LLM call.
+This **native OpenWebUI Function** intercepts `/command` patterns in the chat and injects the corresponding agent system prompt before the LLM call.
+
+No separate Pipelines server needed. No Docker configuration required. Just upload and use.
+
+Type `/plan`, `/review`, `/tdd`, etc. in any chat and Claude Code agents take over.
+
+---
+
+## Quick Installation
+
+### For OpenWebUI users:
+
+1. Go to **Settings → Admin → Functions**
+2. Click **Upload Function**
+3. Select `slash_commands_filter.py` from `prompts/openwebui/`
+4. Configure the `agents_dir` valve (usually `/app/pipelines/agents` for Docker, or your local `agents/` path)
+5. Done! Start typing `/plan`, `/review`, etc.
+
+---
+
+## How It Works
+
+```
+User types:     /plan Build a REST API
+
+Filter:
+  1. Detects /plan → maps to agents/planner.md
+  2. Reads planner.md, strips metadata header
+  3. Injects system prompt as the system message
+  4. Strips /plan prefix → sends "Build a REST API" to LLM
+  5. LLM responds as the Planner agent
+
+Result:         Structured implementation plan
+```
+
+Messages without a `/` prefix pass through unchanged — no performance impact on regular conversations.
+
+---
 
 ## Available Commands
 
@@ -38,51 +74,9 @@ Commands are **case-insensitive**. Your message follows the command:
 
 ---
 
-## Installation
-
-### Option A — Docker Compose (recommended)
-
-Add to your `docker-compose.yml`:
-
-```yaml
-services:
-  openwebui:
-    image: ghcr.io/open-webui/open-webui:main
-    # ...
-
-  pipelines:
-    image: ghcr.io/open-webui/pipelines:main
-    volumes:
-      # Mount the pipeline file
-      - ./prompts/openwebui/slash_commands_pipeline.py:/app/pipelines/slash_commands_pipeline.py
-      # Mount the agents directory so the pipeline can read system prompts
-      - ./agents:/app/pipelines/agents
-    environment:
-      - PIPELINES_DIR=/app/pipelines
-    ports:
-      - "9099:9099"
-```
-
-Then in OpenWebUI → **Settings → Admin → Pipelines**:
-- Set Pipelines URL to `http://pipelines:9099`
-- Click **Save**
-
-The pipeline will appear automatically.
-
----
-
-### Option B — Manual upload (no Docker)
-
-1. Open OpenWebUI → **Settings → Admin → Pipelines**
-2. Click **Upload Pipeline**
-3. Select `slash_commands_pipeline.py`
-4. Configure the `agents_dir` valve to point to your local agents directory
-
----
-
 ## Configuration (Valves)
 
-After installation, go to **Settings → Admin → Pipelines → Multi-LLM Tools**:
+After uploading, click the filter's gear icon to configure:
 
 | Valve | Default | Description |
 |-------|---------|-------------|
@@ -93,46 +87,112 @@ After installation, go to **Settings → Admin → Pipelines → Multi-LLM Tools
 
 ---
 
-## How It Works
+## For Docker Compose Users
 
+Add to your `docker-compose.yml`:
+
+```yaml
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    ports:
+      - "3000:8080"
+    volumes:
+      - open-webui:/app/backend/data
+    environment:
+      - WEBUI_SECRET_KEY=your-secret-key
+
+volumes:
+  open-webui:
 ```
-User types:  /plan Build a REST API
 
-Pipeline:
-  1. Detects /plan → maps to agents/planner.md
-  2. Reads planner.md, extracts system prompt (after ---)
-  3. Injects it as the system message
-  4. Strips /plan from user message → "Build a REST API"
-  5. LLM responds as the Planner agent
-```
+Then:
 
-The pipeline is a **Filter** (not a Pipe) — it runs transparently before every
-LLM call. Messages without a `/command` prefix pass through unchanged.
-
----
-
-## Activating the Pipeline for a Model
-
-1. Go to **Settings → Admin → Models**
-2. Select a model
-3. Under **Filters**, enable **Multi-LLM Tools — Slash Commands**
-4. Save
-
-Or enable it globally for all models.
+1. Start OpenWebUI: `docker compose up -d`
+2. Go to **Settings → Admin → Functions**
+3. Upload `slash_commands_filter.py`
+4. Set `agents_dir` to your local `agents/` path (e.g., `/home/user/Multi-LLM-Tools/agents`)
+5. Done!
 
 ---
 
 ## Troubleshooting
 
 **"Agent not found" error**
-- Check that `agents_dir` valve points to the correct path
-- Verify the `agents/` directory is mounted in the Docker container
-- File names must match: `planner.md`, `code-reviewer.md`, etc.
+- Check the `agents_dir` valve points to the correct path
+- Verify agent files exist: `ls agents/planner.md agents/code-reviewer.md` etc.
+- File names must be exact: `planner.md`, `code-reviewer.md`, etc.
 
-**Commands not intercepted**
-- Make sure the pipeline is enabled for the model you're using
-- The pipeline only intercepts messages that start with `/`
+**Commands not working**
+- Ensure the filter is toggled on (should be by default)
+- Messages must start with `/` — no leading spaces
+- Type `/help` to list all commands
 
-**Pipeline doesn't appear in OpenWebUI**
-- Confirm the Pipelines container is running: `docker ps`
-- Check Pipelines URL in Admin settings (`http://pipelines:9099`)
+**Filter doesn't appear in Functions list**
+- Refresh the page (Ctrl+Shift+R)
+- Check browser console for errors
+- Try uploading again
+
+---
+
+## Why a Function, Not a Pipeline?
+
+Our integration was originally a **Pipelines server** (port 9099) — but OpenWebUI's official guidance is clear:
+
+> *"If your goal is simply to add support for additional providers or basic filters, you likely don't need Pipelines. OpenWebUI Functions are built-in, much more convenient, and easier to configure."*
+
+Our use case (system prompt injection based on slash commands) fits perfectly in a **Function**. Benefits:
+
+- ✅ **No separate service** — runs inside OpenWebUI
+- ✅ **Instant activation** — just upload, no Docker config
+- ✅ **Ideal for closed networks** — no inter-service communication
+- ✅ **Easier maintenance** — one container, simpler logs
+- ✅ **Better for enterprises** — less infrastructure overhead
+
+---
+
+## Usage Examples
+
+### Planning a feature
+```
+/plan Add a real-time notification system to our Django app
+```
+
+### Code review
+```
+/review
+
+def authenticate(username, password):
+    query = f"SELECT * FROM users WHERE username='{username}' AND password='{password}'"
+    return db.execute(query)
+```
+
+### TDD workflow
+```
+/tdd Implement a rate limiter middleware for Express.js
+```
+
+### Security audit
+```
+/security
+[paste your authentication code here]
+```
+
+### Build error
+```
+/build
+Cannot find module './utils/auth' or its corresponding type declarations.
+```
+
+### Get all commands
+```
+/help
+```
+
+---
+
+## See Also
+
+- [Slash Commands reference](../../docs/wiki/Slash-Commands.md)
+- [OpenWebUI Integration guide](../../docs/wiki/OpenWebUI-Integration.md)
+- [Multi-LLM Tools documentation](../../README.md)

@@ -1,8 +1,8 @@
 # OpenWebUI Integration
 
-The OpenWebUI integration uses a **Filter Pipeline** — a Python middleware that intercepts user messages, detects `/command` prefixes, and injects the corresponding agent system prompt before the LLM call.
+The OpenWebUI integration uses a **native Function Filter** — a Python component that intercepts user messages, detects `/command` prefixes, and injects the corresponding agent system prompt before the LLM call.
 
-No model switching required. Type `/plan`, `/review`, `/tdd`, etc. in any chat.
+**No separate service required.** No Pipelines server, no Docker networking, no complexity. Just upload and use. Perfect for closed enterprise networks.
 
 ---
 
@@ -11,7 +11,7 @@ No model switching required. Type `/plan`, `/review`, `/tdd`, etc. in any chat.
 ```
 User types:     /plan Build a REST API
 
-Pipeline:
+Filter:
   1. Detects /plan → maps to agents/planner.md
   2. Reads planner.md, strips metadata header
   3. Injects system prompt as the system message
@@ -27,9 +27,57 @@ Messages without a `/` prefix pass through unchanged — no performance impact o
 
 ## Installation
 
-### Option A — Docker Compose (recommended)
+### Step 1: Locate the Filter File
 
-Add a `pipelines` service to your `docker-compose.yml`:
+The filter is located at:
+```
+prompts/openwebui/slash_commands_filter.py
+```
+
+### Step 2: Upload to OpenWebUI
+
+1. Open OpenWebUI → **Settings → Admin → Functions**
+2. Click **Upload Function**
+3. Select `prompts/openwebui/slash_commands_filter.py`
+4. Click **Upload**
+
+### Step 3: Configure the Filter
+
+After upload, you'll see **"Multi-LLM Tools — Slash Commands"** in your Functions list.
+
+Click the **gear icon** next to it to configure:
+
+| Valve | Default | What to set |
+|-------|---------|-------------|
+| `agents_dir` | `/app/pipelines/agents` | Path to your `agents/` directory |
+| `show_activation_banner` | `true` | (optional) show agent name |
+| `banner_prefix` | `**Agent activated:** ` | (optional) customize banner |
+| `passthrough_unknown` | `true` | (optional) pass unknown commands |
+
+**Most important:** Set `agents_dir` to your local agents directory. Examples:
+- Docker: `/app/pipelines/agents` (if mounted)
+- Local: `/home/user/Multi-LLM-Tools/agents`
+- WSL: `/mnt/c/Users/YourName/Multi-LLM-Tools/agents`
+
+### Step 4: Use It
+
+Type any command in the chat:
+
+```
+/plan Build a REST API with JWT authentication
+/review [paste code]
+/tdd
+/security
+/help
+```
+
+That's it!
+
+---
+
+## For Docker Compose Users
+
+If you're running OpenWebUI in Docker, mount the `agents/` directory:
 
 ```yaml
 services:
@@ -39,77 +87,114 @@ services:
       - "3000:8080"
     volumes:
       - open-webui:/app/backend/data
-    environment:
-      - WEBUI_SECRET_KEY=your-secret-key
-    depends_on:
-      - pipelines
-
-  pipelines:
-    image: ghcr.io/open-webui/pipelines:main
-    ports:
-      - "9099:9099"
-    volumes:
-      # The pipeline file
-      - ./prompts/openwebui/slash_commands_pipeline.py:/app/pipelines/slash_commands_pipeline.py
-      # The agents directory (system prompts)
+      # Mount agents for the filter to read
       - ./agents:/app/pipelines/agents
     environment:
-      - PIPELINES_DIR=/app/pipelines
+      - WEBUI_SECRET_KEY=your-secret-key
 
 volumes:
   open-webui:
 ```
 
-Start everything:
-```bash
-docker compose up -d
+Then:
+1. Start: `docker compose up -d`
+2. Upload the filter via **Settings → Admin → Functions**
+3. Set `agents_dir` to `/app/pipelines/agents` (the mounted path)
+4. Done!
+
+---
+
+## Available Commands
+
+See [Slash Commands](Slash-Commands) for the complete reference.
+
+Quick overview:
+
+```
+/plan [task]       → Implementation planning
+/architect [task]  → System design
+/review [code]     → Code review
+/tdd [feature]     → Test-Driven Development
+/security [code]   → Security audit
+/refactor [code]   → Code cleanup
+/doc [task]        → Documentation
+/build [error]     → Fix build errors
+/e2e [flow]        → E2E tests
+/help              → List all commands
+
+Language-specific:
+/python /typescript /go /rust /java /kotlin /cpp /flutter /db
 ```
 
 ---
 
-### Option B — Manual Upload
+## Troubleshooting
 
-If you already have OpenWebUI running:
+### "Agent not found" error
 
-1. Go to **Settings → Admin → Pipelines**
-2. Set the Pipelines URL to `http://your-pipelines-server:9099`
-3. Click **Upload Pipeline** and select `prompts/openwebui/slash_commands_pipeline.py`
-4. Configure the `agents_dir` Valve (see below)
+**Cause:** The filter can't find the agent files.
 
----
+**Fix:**
+1. Verify `agents_dir` valve points to your agents directory
+2. Check files exist: `ls agents/planner.md agents/code-reviewer.md` etc.
+3. File names must match exactly (case-sensitive): `planner.md`, `code-reviewer.md`, etc.
 
-## Connect OpenWebUI to the Pipelines Server
+### Commands not intercepted
 
-1. Open OpenWebUI → **Settings → Admin → Pipelines**
-2. Set Pipelines URL to: `http://pipelines:9099` (Docker) or `http://localhost:9099` (local)
-3. Click **Save**
-4. The **Multi-LLM Tools — Slash Commands** pipeline will appear automatically
+**Cause:** The filter isn't enabled or message format is wrong.
 
----
+**Fix:**
+1. Verify the filter is toggled on (it should be by default)
+2. Ensure messages start with `/` with no leading spaces
+3. Type `/help` to confirm it's working
 
-## Enable the Pipeline for a Model
+### Filter doesn't appear in Functions list
 
+**Cause:** Upload failed or filter crashed on load.
+
+**Fix:**
+1. Refresh the page (Ctrl+Shift+R)
+2. Check browser console for errors (F12)
+3. Try uploading again
+4. Verify Python syntax is valid (no typos in filter file)
+
+### System prompt not being applied
+
+**Cause:** OpenWebUI has a model-level system prompt that overrides ours.
+
+**Fix:**
 1. Go to **Settings → Admin → Models**
-2. Select the model you want to use with slash commands
-3. Under **Filters**, toggle on **Multi-LLM Tools — Slash Commands**
-4. Save
-
-Or enable it globally: **Settings → Admin → Pipelines → Set as Default Filter**.
+2. Select the model you're using
+3. Clear the "System Prompt" field (or set it to empty)
+4. The filter will now have full control
 
 ---
 
-## Configuration (Valves)
+## Why This Approach?
 
-Go to **Settings → Admin → Pipelines → Multi-LLM Tools** to configure:
+This is a **native OpenWebUI Function**, not a separate Pipelines server. Benefits:
 
-| Valve | Default | Description |
-|-------|---------|-------------|
-| `agents_dir` | `/app/pipelines/agents` | Absolute path to the `agents/` directory |
-| `show_activation_banner` | `true` | Appends "Agent activated: Name" to the system prompt |
-| `banner_prefix` | `**Agent activated:** ` | Text used in the activation banner |
-| `passthrough_unknown` | `true` | If `true`, unknown `/commands` pass through unchanged; if `false`, returns an error |
+### ✅ Simpler Architecture
+- Single container (OpenWebUI)
+- No separate Pipelines service (port 9099)
+- No inter-service communication overhead
 
-**Important:** If you mounted the agents to a different path, update `agents_dir` accordingly.
+### ✅ Perfect for Enterprise Networks
+- No Docker networking complexity
+- No firewall rules between services
+- Works in completely closed networks
+- Easier to deploy and maintain
+
+### ✅ Instant Activation
+- Upload, configure, use
+- No Docker Compose or infrastructure changes
+- Works with managed OpenWebUI instances
+- Ideal for SaaS deployments
+
+### ✅ Better Reliability
+- Single point of failure (unavoidable)
+- Fewer logs to parse and debug
+- OpenWebUI handles all lifecycle management
 
 ---
 
@@ -153,29 +238,8 @@ Cannot find module './utils/auth' or its corresponding type declarations.
 
 ---
 
-## Available Commands
+## See Also
 
-See [Slash Commands](Slash-Commands) for the complete reference.
-
----
-
-## Troubleshooting
-
-### "Agent not found" error
-- Verify the `agents_dir` valve matches your mount path
-- Check the container can read the files: `docker exec pipelines ls /app/pipelines/agents`
-- File names must be exact: `planner.md`, `code-reviewer.md`, etc.
-
-### Pipeline doesn't appear in OpenWebUI
-- Confirm the Pipelines container is running: `docker ps | grep pipelines`
-- Check logs: `docker logs pipelines`
-- Verify the URL in Admin → Pipelines is correct
-
-### Commands not intercepted
-- Ensure the pipeline is enabled for the model you're chatting with
-- Messages must start with `/` — no leading spaces
-
-### System prompt not being applied
-- OpenWebUI may have a system prompt configured for the model that conflicts
-- The pipeline replaces (not appends to) existing system prompts when a command is used
-- Set the model's system prompt to empty if you want agents to have full control
+- [Slash Commands reference](Slash-Commands)
+- [OpenWebUI README](../../../prompts/openwebui/README.md)
+- [Multi-LLM Tools documentation](../../README.md)

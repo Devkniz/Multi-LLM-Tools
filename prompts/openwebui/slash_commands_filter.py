@@ -1,20 +1,21 @@
 """
-⚠️ DEPRECATED — Use slash_commands_filter.py instead
+Multi-LLM Tools — OpenWebUI Slash Commands Filter
+==================================================
+Native OpenWebUI Function that intercepts /command patterns in user messages
+and injects the corresponding agent system prompt before the LLM call.
 
-This was a Pipelines server implementation. It required:
-  - Separate Docker container (ghcr.io/open-webui/pipelines:main)
-  - Port 9099 configuration
-  - Docker networking setup
-  - Pipelines API key management
+Installation:
+  1. Settings → Admin → Functions → Upload Function
+  2. Select this file (slash_commands_filter.py)
+  3. Configure valves: set agents_dir to your agents/ path
+  4. Done! No separate Pipelines server needed.
 
-The new approach (slash_commands_filter.py) is:
-  - ✅ Native OpenWebUI Function
-  - ✅ No separate service
-  - ✅ No Docker configuration
-  - ✅ Perfect for closed networks
-
-Migration: Use slash_commands_filter.py instead.
-See: prompts/openwebui/README.md
+Usage in OpenWebUI chat:
+  /plan Build a REST API for a todo app
+  /review                         (paste code in message)
+  /tdd Write a user auth module
+  /security                       (review conversation context)
+  /help                           (list all commands)
 """
 
 from typing import Optional
@@ -177,7 +178,7 @@ class Filter:
     # ------------------------------------------------------------------
 
     async def inlet(self, body: dict, user: Optional[dict] = None) -> dict:
-        messages: List[dict] = body.get("messages", [])
+        messages = body.get("messages", [])
         if not messages:
             return body
 
@@ -198,7 +199,7 @@ class Filter:
         # /help is handled locally — no LLM call needed
         if command == "help":
             # We inject a fake assistant response by adding a system note.
-            # OpenWebUI will show it after the pipeline processes the request.
+            # OpenWebUI will show it after the filter processes the request.
             # Best approach: replace user message with a meta-prompt that
             # makes the LLM output the help text.
             last["content"] = (
