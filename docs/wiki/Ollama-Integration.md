@@ -73,9 +73,21 @@ cat src/auth.py | ollama run code-reviewer "Review this file"
 
 Once models are created, they appear automatically in OpenWebUI's model list. Select `planner`, `code-reviewer`, etc. from the model dropdown — no slash commands needed, just select the agent model.
 
-**Combine with the Filter Pipeline** for the best experience:
-- Use the model dropdown to select the agent
-- Use slash commands (with the pipeline) for quick switching mid-conversation
+**Combine with the [Slash Commands Filter](OpenWebUI-Integration)** for the best experience:
+- Use the model dropdown to select your base Qwen 2.5 model
+- Use slash commands (`/plan`, `/review`, etc.) for quick agent switching mid-conversation
+- No need to create one Ollama model per agent — one base model + the filter covers all 27 agents
+
+**Recommended setup for Qwen 2.5:**
+```
+OpenWebUI → Ollama → qwen2.5-coder:14b (or :32b)
+         ↓
+   Function Filter (slash_commands_filter.py)
+         ↓
+   Injects agent system prompt dynamically
+```
+
+See [OpenWebUI Integration](OpenWebUI-Integration) for complete setup.
 
 ---
 

@@ -139,9 +139,9 @@ export MULTI_LLM_MODEL_FAST="qwen2.5-coder:7b"
 
 ---
 
-## OpenWebUI Pipeline Configuration
+## OpenWebUI Function Configuration
 
-The OpenWebUI Filter Pipeline has its own settings (Valves), separate from `config.yaml`.  
-Configure them in OpenWebUI → Admin → Pipelines → Multi-LLM Tools.
+The OpenWebUI Function Filter has its own settings (Valves), separate from `config.yaml`.  
+Configure them in OpenWebUI → **Settings → Admin → Functions → Multi-LLM Tools** (click the gear icon).
 
 See [OpenWebUI Integration](OpenWebUI-Integration) for details.

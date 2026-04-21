@@ -58,7 +58,7 @@ python scripts/query_agent.py --list
 
 ### OpenWebUI — Commandes slash natives
 
-Installez la Filter Pipeline pour utiliser `/plan`, `/review`, `/tdd` et plus directement dans le chat :
+Installez la **Function Filter** native (pas de service séparé) pour utiliser `/plan`, `/review`, `/tdd` et plus directement dans le chat :
 
 ```
 /plan Construire une REST API avec authentification JWT
@@ -68,22 +68,24 @@ Installez la Filter Pipeline pour utiliser `/plan`, `/review`, `/tdd` et plus di
 /help                ← lister toutes les commandes disponibles
 ```
 
-**Installation rapide (Docker Compose) :**
+**Installation rapide (3 étapes) :**
 
-```yaml
-services:
-  pipelines:
-    image: ghcr.io/open-webui/pipelines:main
-    volumes:
-      - ./prompts/openwebui/slash_commands_pipeline.py:/app/pipelines/slash_commands_pipeline.py
-      - ./agents:/app/pipelines/agents
-    ports:
-      - "9099:9099"
-```
+1. Montez le dossier `agents/` dans votre conteneur OpenWebUI :
+   ```yaml
+   services:
+     open-webui:
+       image: ghcr.io/open-webui/open-webui:main
+       ports: ["3000:8080"]
+       volumes:
+         - open-webui:/app/backend/data
+         - ./agents:/app/pipelines/agents:ro
+   ```
 
-Puis dans OpenWebUI → **Paramètres → Admin → Pipelines** → définir l'URL sur `http://pipelines:9099`.
+2. Dans OpenWebUI → **Paramètres → Admin → Functions** → **Upload Function** → sélectionnez `prompts/openwebui/slash_commands_filter.py`
 
-Voir [`prompts/openwebui/README.md`](prompts/openwebui/README.md) pour le guide complet.
+3. Cliquez sur l'icône engrenage → définir `agents_dir` sur `/app/pipelines/agents` → terminé !
+
+**Fonctionne parfaitement avec Ollama + Qwen 2.5** pour les réseaux d'entreprise fermés. Voir [`prompts/openwebui/README.md`](prompts/openwebui/README.md) pour le guide complet.
 
 ---
 
@@ -245,7 +247,7 @@ Multi-LLM-Tools/
 ├── skills/                            ← Packs de connaissances
 ├── rules/                             ← Directives de code
 ├── prompts/
-│   ├── openwebui/                     ← Filter Pipeline + guide
+│   ├── openwebui/                     ← Function Filter + guide
 │   ├── aider/                         ← Fichiers .txt system prompt
 │   ├── continue/                      ← Fragment config.json
 │   ├── ollama/                        ← Modelfiles

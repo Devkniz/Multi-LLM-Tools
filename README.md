@@ -58,7 +58,7 @@ python scripts/query_agent.py --list
 
 ### OpenWebUI — Native Slash Commands
 
-Install the Filter Pipeline to use `/plan`, `/review`, `/tdd`, and more directly in chat:
+Install the native **Function Filter** (no separate service needed) to use `/plan`, `/review`, `/tdd`, and more directly in chat:
 
 ```
 /plan Build a REST API with JWT authentication
@@ -68,22 +68,24 @@ Install the Filter Pipeline to use `/plan`, `/review`, `/tdd`, and more directly
 /help                     ← list all available commands
 ```
 
-**Quick setup (Docker Compose):**
+**Quick setup (3 steps):**
 
-```yaml
-services:
-  pipelines:
-    image: ghcr.io/open-webui/pipelines:main
-    volumes:
-      - ./prompts/openwebui/slash_commands_pipeline.py:/app/pipelines/slash_commands_pipeline.py
-      - ./agents:/app/pipelines/agents
-    ports:
-      - "9099:9099"
-```
+1. Mount the `agents/` directory into your OpenWebUI container:
+   ```yaml
+   services:
+     open-webui:
+       image: ghcr.io/open-webui/open-webui:main
+       ports: ["3000:8080"]
+       volumes:
+         - open-webui:/app/backend/data
+         - ./agents:/app/pipelines/agents:ro
+   ```
 
-Then in OpenWebUI → **Settings → Admin → Pipelines** → set URL to `http://pipelines:9099`.
+2. In OpenWebUI → **Settings → Admin → Functions** → **Upload Function** → select `prompts/openwebui/slash_commands_filter.py`
 
-See [`prompts/openwebui/README.md`](prompts/openwebui/README.md) for the full guide.
+3. Click the gear icon → set `agents_dir` to `/app/pipelines/agents` → done!
+
+**Works great with Ollama + Qwen 2.5** for closed enterprise networks. See [`prompts/openwebui/README.md`](prompts/openwebui/README.md) for the full guide.
 
 ---
 
@@ -286,7 +288,7 @@ Multi-LLM-Tools/
 │   ├── common/
 │   └── <language>/
 ├── prompts/
-│   ├── openwebui/                     ← Filter Pipeline + README
+│   ├── openwebui/                     ← Function Filter + README
 │   ├── aider/                         ← System prompt .txt files
 │   ├── continue/                      ← config.json fragment
 │   ├── ollama/                        ← Modelfiles

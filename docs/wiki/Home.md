@@ -9,7 +9,7 @@
 | [Agents](Agents) | All 28 agents — descriptions, model tiers, slash commands |
 | [Skills](Skills) | All 65 skills organized by category |
 | [Slash Commands](Slash-Commands) | Complete `/command` reference for OpenWebUI |
-| [OpenWebUI Integration](OpenWebUI-Integration) | Filter Pipeline installation and configuration |
+| [OpenWebUI Integration](OpenWebUI-Integration) | Native Function Filter installation and configuration |
 | [Ollama Integration](Ollama-Integration) | Specialized models with baked-in system prompts |
 | [Aider Integration](Aider-Integration) | System prompt files for Aider |
 | [continue.dev Integration](continue.dev-Integration) | Slash commands for VS Code / JetBrains |
@@ -46,7 +46,7 @@ See [Configuration](Configuration) for all options.
 
 | Platform | How agents are used | Slash commands? |
 |----------|--------------------|--------------:|
-| **OpenWebUI** | Filter Pipeline injects system prompts | Yes — `/plan`, `/review`, etc. |
+| **OpenWebUI** | Native Function Filter injects system prompts | Yes — `/plan`, `/review`, etc. |
 | **continue.dev** | `slashCommands` in config.json | Yes — `/planner`, `/code-reviewer`, etc. |
 | **Aider** | `--system-prompt-file` at startup | No (switch files) |
 | **Ollama CLI** | Dedicated model per agent via Modelfile | No (switch models) |
