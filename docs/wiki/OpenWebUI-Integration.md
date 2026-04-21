@@ -104,6 +104,166 @@ Then:
 
 ---
 
+## Complete Setup: OpenWebUI + Ollama + Qwen 2.5 (Closed Network)
+
+This is the **recommended setup for enterprise closed networks**: everything runs locally, no external API calls, no separate services.
+
+### Architecture
+
+```
+┌─────────────────────────────────────────────────┐
+│             Closed Enterprise Network            │
+│                                                  │
+│   ┌─────────────┐        ┌──────────────┐       │
+│   │  OpenWebUI  │───────▶│    Ollama    │       │
+│   │   :3000     │        │    :11434    │       │
+│   │             │        │              │       │
+│   │  + Function │        │  qwen2.5-    │       │
+│   │    Filter   │        │  coder:14b   │       │
+│   └─────────────┘        └──────────────┘       │
+│          │                                       │
+│          └──▶ mounts: ./agents/*.md              │
+│                                                  │
+└─────────────────────────────────────────────────┘
+```
+
+### Step-by-Step Installation
+
+#### 1. Install Ollama and pull Qwen 2.5
+
+```bash
+# Install Ollama (if not already done)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# Pull Qwen 2.5 Coder — choose size based on your GPU:
+ollama pull qwen2.5-coder:7b    # 8GB VRAM
+ollama pull qwen2.5-coder:14b   # 16GB VRAM (recommended)
+ollama pull qwen2.5-coder:32b   # 24GB+ VRAM (best quality)
+
+# Verify
+ollama list
+```
+
+#### 2. Run OpenWebUI with Ollama and agents mounted
+
+**Docker Compose (recommended):**
+
+```yaml
+services:
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    # For GPU support:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    ports:
+      - "3000:8080"
+    environment:
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - WEBUI_SECRET_KEY=change-me-to-a-random-string
+    volumes:
+      - open-webui:/app/backend/data
+      # CRITICAL: mount agents so the filter can read them
+      - ./agents:/app/pipelines/agents:ro
+    depends_on:
+      - ollama
+
+volumes:
+  ollama:
+  open-webui:
+```
+
+Start it:
+```bash
+docker compose up -d
+```
+
+#### 3. Upload the Function Filter
+
+1. Open http://localhost:3000
+2. Create admin account (first user is admin)
+3. Go to **Settings → Admin → Functions**
+4. Click **Upload Function**
+5. Select `prompts/openwebui/slash_commands_filter.py`
+6. Click the gear icon on the uploaded filter
+7. Set valves:
+   - `agents_dir`: `/app/pipelines/agents` (the mount path)
+   - Leave others as default
+8. Toggle the filter ON
+
+#### 4. Configure Qwen 2.5 as default model
+
+1. Go to **Settings → Admin → Models**
+2. You should see `qwen2.5-coder:14b` (or your chosen size) from Ollama
+3. Click on it → **Filters** tab → enable **Multi-LLM Tools — Slash Commands**
+4. Save
+
+#### 5. Test it!
+
+Start a new chat, select `qwen2.5-coder:14b`, and type:
+
+```
+/help
+```
+
+You should see the list of all 27 agent commands.
+
+```
+/plan Build a REST API with JWT authentication for a multi-tenant SaaS
+```
+
+Qwen 2.5 will now respond as the Planner agent.
+
+### Tips for Qwen 2.5
+
+**Which size to choose?**
+
+| Size | VRAM | Best For |
+|------|------|----------|
+| `qwen2.5-coder:7b` | 8 GB | Quick reviews, build fixes, docs |
+| `qwen2.5-coder:14b` | 16 GB | **Recommended** — all agents work well |
+| `qwen2.5-coder:32b` | 24 GB+ | Architect, planner, complex tasks |
+
+**Adjust context window in Ollama for long prompts:**
+
+Some agents (like `architect`, `planner`) have long system prompts. Ensure Ollama's context window is large enough:
+
+1. In OpenWebUI: **Settings → Models → qwen2.5-coder:14b**
+2. Set **Context Length** to `8192` or `16384`
+3. Save
+
+**Temperature tuning:**
+- Code review (`/review`, `/security`): temperature `0.1–0.3` (deterministic)
+- Planning (`/plan`, `/architect`): temperature `0.5–0.7` (more creative)
+- Set per-model in **Settings → Models → Advanced**
+
+### No Internet Required
+
+Once set up, this stack runs entirely offline:
+- ✅ Ollama: local models, no API calls
+- ✅ OpenWebUI: runs locally
+- ✅ Filter: reads local files
+- ✅ No telemetry, no data leaves your network
+
+Perfect for:
+- Enterprise closed networks
+- Air-gapped environments
+- Security-sensitive industries (defense, finance, healthcare)
+- Regulated workflows (GDPR, HIPAA, SOC2)
+
+---
+
 ## Available Commands
 
 See [Slash Commands](Slash-Commands) for the complete reference.

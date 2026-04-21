@@ -1,6 +1,6 @@
 # Slash Commands Reference
 
-Slash commands are available in **OpenWebUI** (via the Filter Pipeline) and **continue.dev** (via config fragment).  
+Slash commands are available in **OpenWebUI** (via the native Function Filter) and **continue.dev** (via config fragment).  
 Type a command at the start of your message, optionally followed by your request.
 
 ```
@@ -148,7 +148,7 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
 
 **Case-insensitive:** `/Plan`, `/PLAN`, and `/plan` all work.
 
-**Unknown commands:** Unknown commands are passed through unchanged (configurable in the Pipeline Valves).
+**Unknown commands:** Unknown commands are passed through unchanged (configurable in the Function's Valves).
 
 ---
 
@@ -156,7 +156,7 @@ error[E0502]: cannot borrow `v` as mutable because it is also borrowed as immuta
 
 | Feature | OpenWebUI | continue.dev | Aider | Ollama |
 |---------|-----------|-------------|-------|--------|
-| Slash commands | Yes (Filter Pipeline) | Yes (config fragment) | No | No |
+| Slash commands | Yes (Function Filter) | Yes (config fragment) | No | No |
 | All 27 agents | Yes | Yes | N/A | 7 Modelfiles |
 | Works offline | Yes | Yes | Yes | Yes |
 
