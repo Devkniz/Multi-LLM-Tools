@@ -1,6 +1,10 @@
 # Claude Code local settings (contains secrets/personal config)
 .claude/settings.local.json
 
+# Claude working directory — session notes, decisions, scratch
+# See .context/README.md for purpose and structure
+.context/
+
 # Python
 __pycache__/
 *.py[cod]
