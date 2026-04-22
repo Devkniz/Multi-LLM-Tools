@@ -1,5 +1,3 @@
-version: '3.8'
-
 # ─────────────────────────────────────────────────────────────────
 # docker-compose.yml
 # ─────────────────────────────────────────────────────────────────
@@ -40,10 +38,12 @@ services:
     #           count: all
     #           capabilities: [gpu]
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      # Use the ollama binary itself for health check (curl not available in image)
+      test: ["CMD", "ollama", "list"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
 
   # ─────────────────────────────────────────────────────────────────
   # OpenWebUI — Chat interface with native Function Filter
