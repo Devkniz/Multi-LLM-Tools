@@ -1,0 +1,52 @@
+version: '3.8'
+
+# ─────────────────────────────────────────────────────────────────
+# docker-compose.local.yml
+# ─────────────────────────────────────────────────────────────────
+#
+# Use this if you're running Ollama locally (e.g., via Brew on macOS).
+#
+# Usage:
+#   docker compose -f docker-compose.local.yml up -d
+#
+# This ONLY starts OpenWebUI in Docker and connects to your local Ollama.
+# Perfect for individual development.
+#
+# Prerequisites:
+#   - Ollama installed locally (e.g., brew install ollama)
+#   - Ollama running (ollama serve)
+#   - Model pulled (ollama pull qwen2.5-coder:14b)
+
+services:
+  # ─────────────────────────────────────────────────────────────────
+  # OpenWebUI — Chat interface with native Function Filter
+  # ─────────────────────────────────────────────────────────────────
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui-local
+    ports:
+      - "3000:8080"
+    environment:
+      # Connect to Ollama running on your local machine
+      # On macOS, use host.docker.internal to reach the host machine
+      - OLLAMA_BASE_URL=http://host.docker.internal:11434
+      # Security: change this to a random string
+      - WEBUI_SECRET_KEY=your-secret-key-change-this
+      # Log level
+      - LOG_LEVEL=INFO
+    volumes:
+      # Persist OpenWebUI data (user profiles, chat history, etc.)
+      - open-webui-local:/app/backend/data
+      # CRITICAL: Mount agents/ directory so the Function Filter can read agent system prompts
+      - ./agents:/app/pipelines/agents:ro
+    # Optional: GPU support (Apple Metal on macOS)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: apple_gpu
+    #           count: 1
+
+volumes:
+  open-webui-local:
+    driver: local
