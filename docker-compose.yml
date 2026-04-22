@@ -1,5 +1,23 @@
 version: '3.8'
 
+# ─────────────────────────────────────────────────────────────────
+# docker-compose.yml
+# ─────────────────────────────────────────────────────────────────
+#
+# Production/team setup: Everything in Docker for easy distribution.
+#
+# Usage:
+#   docker compose up -d
+#
+# This starts BOTH Ollama and OpenWebUI in containers, requiring only
+# Docker to be installed. Perfect for:
+#   - Team deployments
+#   - Closed enterprise networks
+#   - Reproducible, version-controlled environments
+#
+# For individual development with local Ollama, use:
+#   docker compose -f docker-compose.local.yml up -d
+
 services:
   # ─────────────────────────────────────────────────────────────────
   # Ollama — Local LLM inference engine
