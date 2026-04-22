@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # ─────────────────────────────────────────────────────────────────
+  # Ollama — Local LLM inference engine
+  # ─────────────────────────────────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    environment:
+      - OLLAMA_HOST=0.0.0.0:11434
+    # Uncomment for GPU support (NVIDIA CUDA)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─────────────────────────────────────────────────────────────────
+  # OpenWebUI — Chat interface with native Function Filter
+  # ─────────────────────────────────────────────────────────────────
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3000:8080"
+    environment:
+      # Connect to local Ollama instance
+      - OLLAMA_BASE_URL=http://ollama:11434
+      # Security: change this to a random string
+      - WEBUI_SECRET_KEY=your-secret-key-change-this
+      # Optional: log level
+      - LOG_LEVEL=INFO
+    volumes:
+      # Persist OpenWebUI data (user profiles, chat history, etc.)
+      - open-webui:/app/backend/data
+      # CRITICAL: Mount agents/ directory so the Function Filter can read agent system prompts
+      # The filter looks for .md files at /app/pipelines/agents/
+      - ./agents:/app/pipelines/agents:ro
+      # Optional: mount the filter itself if you want to edit it live
+      # - ./prompts/openwebui/slash_commands_filter.py:/app/plugins/slash_commands_filter.py:ro
+    depends_on:
+      ollama:
+        condition: service_healthy
+    # Uncomment for GPU support (NVIDIA CUDA)
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: all
+    #           capabilities: [gpu]
+
+# ─────────────────────────────────────────────────────────────────
+# Named volumes
+# ─────────────────────────────────────────────────────────────────
+volumes:
+  ollama:
+    driver: local
+  open-webui:
+    driver: local
+
+# ─────────────────────────────────────────────────────────────────
+# Network configuration (optional)
+# ─────────────────────────────────────────────────────────────────
+networks:
+  default:
+    name: multi-llm-tools
+    driver: bridge
