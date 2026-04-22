@@ -1,4 +1,20 @@
-version: '3.8'
+# ─────────────────────────────────────────────────────────────────
+# docker-compose.yml
+# ─────────────────────────────────────────────────────────────────
+#
+# Production/team setup: Everything in Docker for easy distribution.
+#
+# Usage:
+#   docker compose up -d
+#
+# This starts BOTH Ollama and OpenWebUI in containers, requiring only
+# Docker to be installed. Perfect for:
+#   - Team deployments
+#   - Closed enterprise networks
+#   - Reproducible, version-controlled environments
+#
+# For individual development with local Ollama, use:
+#   docker compose -f docker-compose.local.yml up -d
 
 services:
   # ─────────────────────────────────────────────────────────────────
@@ -22,10 +38,12 @@ services:
     #           count: all
     #           capabilities: [gpu]
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      # Use the ollama binary itself for health check (curl not available in image)
+      test: ["CMD", "ollama", "list"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
 
   # ─────────────────────────────────────────────────────────────────
   # OpenWebUI — Chat interface with native Function Filter
